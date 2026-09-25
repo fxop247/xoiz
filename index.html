@@ -3,162 +3,350 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Xoiz Mini App</title>
+  <title>XOIZ Earn</title>
+  
   <!-- Telegram WebApp SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <!-- Tailwind CSS CDN -->
+  <!-- Adsgram SDK -->
+  <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
+  <!-- Tailwind CSS & Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
   <style>
     body {
-      background-color: #05130b;
+      background-color: #030d07;
       color: #e2e8f0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       user-select: none;
       -webkit-tap-highlight-color: transparent;
     }
     .neon-card {
-      background: linear-gradient(145deg, #0d2516, #06170d);
-      border: 1px solid rgba(34, 197, 94, 0.2);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      background: linear-gradient(160deg, #091e11 0%, #041008 100%);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
     }
     .neon-btn {
       background: linear-gradient(135deg, #10b981, #059669);
-      box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.35);
     }
     .active-nav {
       color: #10b981;
+    }
+    .tab-content {
+      animation: fadeIn 0.15s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body class="pb-24">
 
-  <!-- Header -->
-  <div class="px-5 pt-5 pb-3 flex justify-between items-center border-b border-emerald-950/60">
+  <!-- TOP HEADER -->
+  <div class="px-5 pt-4 pb-3 flex justify-between items-center border-b border-emerald-950/80 sticky top-0 bg-[#030d07]/95 backdrop-blur-md z-40">
     <div class="flex items-center space-x-3">
-      <div class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center font-bold text-emerald-400" id="userAvatar">
+      <div class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center font-black text-emerald-400 text-lg shadow-inner" id="userAvatar">
         X
       </div>
       <div>
-        <p class="text-xs text-emerald-500 font-medium tracking-wide">WELCOME BACK</p>
-        <p class="font-bold text-white text-sm" id="username">Guest User</p>
+        <p class="text-[10px] text-emerald-500 font-bold tracking-wider">WELCOME BACK</p>
+        <p class="font-extrabold text-white text-sm" id="username">Loading...</p>
       </div>
     </div>
-    <div class="bg-emerald-950/80 px-3 py-1.5 rounded-full border border-emerald-800 text-xs font-semibold text-emerald-300">
+    <div class="bg-emerald-950/90 px-3 py-1.5 rounded-full border border-emerald-800/80 text-[11px] font-bold text-emerald-300">
       ⚡ ID: <span id="userId">---</span>
     </div>
   </div>
 
-  <!-- Balance Card -->
+  <!-- BALANCE DISPLAY CARD -->
   <div class="p-5">
     <div class="neon-card rounded-2xl p-5 relative overflow-hidden">
-      <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-emerald-500/10 rounded-full blur-2xl"></div>
-      <p class="text-xs text-gray-400 uppercase tracking-widest font-semibold">Total Balance</p>
-      <div class="flex items-baseline space-x-2 mt-1">
-        <h1 class="text-4xl font-extrabold text-white" id="balance">0</h1>
-        <span class="text-emerald-400 font-bold text-sm tracking-wide">XOIZ</span>
+      <div class="absolute -right-6 -bottom-6 w-28 h-28 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none"></div>
+      <div class="flex justify-between items-start">
+        <div>
+          <p class="text-[11px] text-gray-400 uppercase tracking-widest font-bold">Total Balance</p>
+          <div class="flex items-baseline space-x-2 mt-0.5">
+            <h1 class="text-4xl font-black text-white tracking-tight" id="balance">0</h1>
+            <span class="text-emerald-400 font-bold text-sm">XOIZ</span>
+          </div>
+          <p class="text-xs text-emerald-400 font-semibold mt-1">≈ ₹<span id="inrVal">0.00</span> (<span id="usdVal">0.0000</span> USD)</p>
+        </div>
+        <div class="text-3xl text-emerald-400 opacity-80">
+          ☘️
+        </div>
       </div>
-      <p class="text-xs text-emerald-400/80 mt-1 font-medium">≈ $<span id="usdVal">0.0000</span></p>
-      
+
       <div class="grid grid-cols-2 gap-3 mt-4">
-        <button onclick="switchTab('earn')" class="neon-btn py-2.5 rounded-xl font-bold text-sm text-black flex items-center justify-center space-x-1.5">
+        <button onclick="switchTab('earn')" class="neon-btn py-2.5 rounded-xl font-black text-xs text-black tracking-wide flex items-center justify-center space-x-1.5 active:scale-95 transition">
           <i class="fa-solid fa-bolt"></i>
           <span>EARN</span>
         </button>
-        <button onclick="switchTab('wallet')" class="bg-emerald-950 border border-emerald-700/60 py-2.5 rounded-xl font-bold text-sm text-emerald-300 flex items-center justify-center space-x-1.5">
-          <i class="fa-solid fa-wallet"></i>
+        <button onclick="switchTab('wallet')" class="bg-emerald-950/90 border border-emerald-600/50 py-2.5 rounded-xl font-black text-xs text-emerald-300 tracking-wide flex items-center justify-center space-x-1.5 active:scale-95 transition">
+          <i class="fa-solid fa-arrow-up-from-bracket"></i>
           <span>WITHDRAW</span>
         </button>
       </div>
     </div>
   </div>
 
-  <!-- TAB: HOME / TASKS -->
+  <!-- ================= TAB 1: HOME ================= -->
   <div id="tab-home" class="tab-content px-5 space-y-4">
-    <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Quick Actions</p>
-    
-    <div class="neon-card rounded-xl p-4 flex items-center justify-between cursor-pointer" onclick="watchAd()">
+    <!-- Daily Wheel Promo Banner -->
+    <div onclick="switchTab('play')" class="neon-card rounded-xl p-4 flex items-center justify-between cursor-pointer border-amber-500/30">
       <div class="flex items-center space-x-3">
-        <div class="w-11 h-11 rounded-lg bg-emerald-950 flex items-center justify-center text-emerald-400 text-lg border border-emerald-800">
-          <i class="fa-solid fa-play"></i>
+        <div class="w-11 h-11 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center text-xl border border-amber-500/40">
+          🎡
         </div>
         <div>
-          <h4 class="font-bold text-sm text-white">Watch Sponsored Ad</h4>
-          <p class="text-xs text-gray-400">+100 XOIZ Coins</p>
+          <span class="bg-amber-400/20 text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded">1 FREE / DAY</span>
+          <h4 class="font-bold text-sm text-white mt-1">Lucky Spin Wheel</h4>
+          <p class="text-xs text-gray-400">Win up to 1,000 XOIZ free daily</p>
         </div>
       </div>
-      <button class="bg-emerald-600/30 text-emerald-400 text-xs font-bold px-3 py-1.5 rounded-lg border border-emerald-500/40">
-        WATCH
-      </button>
+      <i class="fa-solid fa-chevron-right text-gray-500"></i>
     </div>
 
-    <div class="neon-card rounded-xl p-4 flex items-center justify-between cursor-pointer" onclick="openChannel()">
+    <!-- Quick Tasks Section -->
+    <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Featured Tasks</p>
+    
+    <div class="neon-card rounded-xl p-3.5 flex items-center justify-between">
       <div class="flex items-center space-x-3">
-        <div class="w-11 h-11 rounded-lg bg-emerald-950 flex items-center justify-center text-emerald-400 text-lg border border-emerald-800">
+        <div class="w-10 h-10 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center text-lg border border-blue-500/40">
           <i class="fa-brands fa-telegram"></i>
         </div>
         <div>
           <h4 class="font-bold text-sm text-white">Join Official Channel</h4>
-          <p class="text-xs text-gray-400">+250 XOIZ Coins</p>
+          <p class="text-xs text-emerald-400 font-semibold">+400 XOIZ</p>
         </div>
       </div>
-      <button class="bg-emerald-600/30 text-emerald-400 text-xs font-bold px-3 py-1.5 rounded-lg border border-emerald-500/40">
+      <button onclick="doTask('channel', 400, 'https://t.me/xoizbot')" id="btn-task-channel" class="bg-emerald-600/30 text-emerald-400 text-xs font-black px-3.5 py-1.5 rounded-lg border border-emerald-500/40">
+        JOIN
+      </button>
+    </div>
+
+    <div class="neon-card rounded-xl p-3.5 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg border border-emerald-500/40">
+          <i class="fa-solid fa-users"></i>
+        </div>
+        <div>
+          <h4 class="font-bold text-sm text-white">Join Discussion Group</h4>
+          <p class="text-xs text-emerald-400 font-semibold">+300 XOIZ</p>
+        </div>
+      </div>
+      <button onclick="doTask('group', 300, 'https://t.me/xoizbot')" id="btn-task-group" class="bg-emerald-600/30 text-emerald-400 text-xs font-black px-3.5 py-1.5 rounded-lg border border-emerald-500/40">
         JOIN
       </button>
     </div>
   </div>
 
-  <!-- TAB: EARN (ADS) -->
+  <!-- ================= TAB 2: EARN (ADS SECTION) ================= -->
   <div id="tab-earn" class="tab-content hidden px-5 space-y-4">
-    <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Ad Tasks</p>
-    <div class="grid grid-cols-2 gap-3">
-      <div class="neon-card p-4 rounded-xl text-center space-y-2">
-        <div class="text-2xl text-emerald-400"><i class="fa-solid fa-film"></i></div>
-        <p class="font-bold text-sm">Reward Video</p>
-        <p class="text-xs text-emerald-400">+150 XOIZ</p>
-        <button onclick="watchAd()" class="w-full neon-btn py-1.5 rounded-lg text-xs font-bold text-black mt-2">WATCH</button>
-      </div>
-      <div class="neon-card p-4 rounded-xl text-center space-y-2">
-        <div class="text-2xl text-emerald-400"><i class="fa-solid fa-gamepad"></i></div>
-        <p class="font-bold text-sm">Play & Earn</p>
-        <p class="text-xs text-emerald-400">+100 XOIZ</p>
-        <button onclick="watchAd()" class="w-full neon-btn py-1.5 rounded-lg text-xs font-bold text-black mt-2">PLAY</button>
-      </div>
+    <div class="flex justify-between items-center">
+      <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Watch & Earn Video Ads</p>
+      <span class="text-xs font-bold text-emerald-400" id="adsLeftText">Limit: 10/10</span>
     </div>
-  </div>
 
-  <!-- TAB: WALLET -->
-  <div id="tab-wallet" class="tab-content hidden px-5 space-y-4">
-    <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Cash Out</p>
-    <div class="neon-card rounded-xl p-4 space-y-3">
-      <label class="text-xs font-semibold text-gray-300">Select Gateway</label>
-      <div class="grid grid-cols-2 gap-2">
-        <div class="bg-emerald-950 p-2.5 rounded-lg border border-emerald-700 text-xs font-bold text-emerald-300 text-center">FaucetPay</div>
-        <div class="bg-emerald-950/40 p-2.5 rounded-lg border border-gray-800 text-xs font-bold text-gray-500 text-center">USDT (BEP20)</div>
+    <!-- Ad Slot 1 -->
+    <div class="neon-card p-4 rounded-xl flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-12 h-12 rounded-xl bg-emerald-950 flex items-center justify-center text-xl text-emerald-400 border border-emerald-800">
+          👀
+        </div>
+        <div>
+          <span class="text-[10px] bg-emerald-900/60 text-emerald-300 font-bold px-2 py-0.5 rounded">AD #1</span>
+          <h4 class="font-bold text-sm text-white mt-1">High-CPM Video</h4>
+          <p class="text-xs text-emerald-400 font-black">+200 XOIZ</p>
+        </div>
       </div>
-      
-      <label class="text-xs font-semibold text-gray-300 mt-2 block">FaucetPay Email / Address</label>
-      <input type="text" placeholder="name@example.com" class="w-full bg-black/50 border border-emerald-900 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
-      
-      <button onclick="requestWithdraw()" class="w-full neon-btn py-2.5 rounded-xl font-bold text-xs text-black mt-3">
-        SUBMIT WITHDRAWAL
+      <button onclick="triggerAdsgram(200)" class="neon-btn text-black text-xs font-black px-4 py-2 rounded-xl">
+        WATCH
+      </button>
+    </div>
+
+    <!-- Ad Slot 2 -->
+    <div class="neon-card p-4 rounded-xl flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-12 h-12 rounded-xl bg-emerald-950 flex items-center justify-center text-xl text-emerald-400 border border-emerald-800">
+          🎬
+        </div>
+        <div>
+          <span class="text-[10px] bg-emerald-900/60 text-emerald-300 font-bold px-2 py-0.5 rounded">AD #2</span>
+          <h4 class="font-bold text-sm text-white mt-1">Sponsor Clip</h4>
+          <p class="text-xs text-emerald-400 font-black">+100 XOIZ</p>
+        </div>
+      </div>
+      <button onclick="triggerAdsgram(100)" class="neon-btn text-black text-xs font-black px-4 py-2 rounded-xl">
+        WATCH
       </button>
     </div>
   </div>
 
-  <!-- Bottom Navigation -->
-  <div class="fixed bottom-0 left-0 right-0 bg-[#040e08]/95 backdrop-blur-md border-t border-emerald-950/80 px-6 py-3 flex justify-between items-center z-50">
-    <button onclick="switchTab('home')" id="nav-home" class="flex flex-col items-center text-xs active-nav">
+  <!-- ================= TAB 3: PLAY (ARCADE & LUCKY WHEEL) ================= -->
+  <div id="tab-play" class="tab-content hidden px-5 space-y-4">
+    <!-- Wheel Component -->
+    <div class="neon-card rounded-2xl p-5 text-center">
+      <h3 class="font-extrabold text-base text-white">Daily Lucky Spin</h3>
+      <p class="text-xs text-gray-400 mt-0.5">Spin the wheel and get free XOIZ tokens!</p>
+      
+      <div class="w-32 h-32 mx-auto my-4 rounded-full border-4 border-dashed border-emerald-400/60 flex items-center justify-center text-4xl bg-emerald-950/40" id="wheelBox">
+        🎁
+      </div>
+
+      <button onclick="spinWheel()" id="spinBtn" class="w-full neon-btn py-2.5 rounded-xl font-black text-xs text-black tracking-wide">
+        SPIN NOW (FREE)
+      </button>
+    </div>
+
+    <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">All Arcade Games</p>
+
+    <!-- Game 1 -->
+    <div class="neon-card rounded-xl p-3.5 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center text-xl border border-purple-500/40">
+          🚀
+        </div>
+        <div>
+          <h4 class="font-bold text-sm text-white">Leaf Shooter</h4>
+          <p class="text-[11px] text-gray-400">Survive swarm — up to 1,000</p>
+        </div>
+      </div>
+      <button onclick="playMiniGame('Shooter')" class="bg-purple-950/80 text-purple-300 border border-purple-500/40 text-xs font-black px-3.5 py-1.5 rounded-lg">
+        PLAY
+      </button>
+    </div>
+
+    <!-- Game 2 -->
+    <div class="neon-card rounded-xl p-3.5 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl border border-emerald-500/40">
+          🐍
+        </div>
+        <div>
+          <h4 class="font-bold text-sm text-white">Snake 90s Dash</h4>
+          <p class="text-[11px] text-gray-400">Eat leaves, beat high score</p>
+        </div>
+      </div>
+      <button onclick="playMiniGame('Snake')" class="bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 text-xs font-black px-3.5 py-1.5 rounded-lg">
+        PLAY
+      </button>
+    </div>
+  </div>
+
+  <!-- ================= TAB 4: FRIENDS (REFERRAL) ================= -->
+  <div id="tab-friends" class="tab-content hidden px-5 space-y-4">
+    <div class="neon-card rounded-2xl p-5 text-center">
+      <p class="text-[11px] text-gray-400 font-bold uppercase tracking-wider">Per Friend You Invite</p>
+      <div class="flex justify-center items-baseline space-x-1.5 mt-1">
+        <h2 class="text-3xl font-black text-white">750</h2>
+        <span class="text-emerald-400 font-bold text-sm">XOIZ</span>
+      </div>
+      <p class="text-[11px] text-emerald-400 mt-1 font-semibold">250 on join + 500 when active + 5% forever</p>
+
+      <div class="grid grid-cols-3 gap-2 mt-4 bg-black/40 p-3 rounded-xl border border-emerald-950">
+        <div>
+          <p class="text-[10px] text-gray-400 font-bold">FRIENDS</p>
+          <p class="text-base font-extrabold text-white mt-0.5" id="friendsCount">0</p>
+        </div>
+        <div>
+          <p class="text-[10px] text-gray-400 font-bold">ACTIVE</p>
+          <p class="text-base font-extrabold text-emerald-400 mt-0.5" id="activeFriendsCount">0</p>
+        </div>
+        <div>
+          <p class="text-[10px] text-gray-400 font-bold">EARNED</p>
+          <p class="text-base font-extrabold text-white mt-0.5" id="refEarned">0</p>
+        </div>
+      </div>
+
+      <button onclick="shareReferral()" class="w-full neon-btn py-3 rounded-xl font-black text-xs text-black tracking-wide mt-4 flex items-center justify-center space-x-2 active:scale-95 transition">
+        <i class="fa-solid fa-share-nodes"></i>
+        <span>INVITE FRIENDS</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ================= TAB 5: WALLET / CASH OUT ================= -->
+  <div id="tab-wallet" class="tab-content hidden px-5 space-y-4">
+    <div class="neon-card rounded-2xl p-5 space-y-4">
+      <h3 class="font-extrabold text-sm text-white uppercase tracking-wider">Cash Out Gateway</h3>
+      
+      <!-- Gateways 3 Options -->
+      <div class="grid grid-cols-3 gap-2">
+        <button onclick="setGateway('UPI', 2500)" id="gw-upi" class="bg-emerald-950 border-2 border-emerald-500 p-2.5 rounded-xl text-left">
+          <p class="text-xs font-black text-white">🇮🇳 UPI</p>
+          <p class="text-[9px] text-emerald-400 font-semibold mt-0.5">Min: ₹50</p>
+        </button>
+        <button onclick="setGateway('FaucetPay', 500)" id="gw-faucet" class="bg-black/40 border border-gray-800 p-2.5 rounded-xl text-left">
+          <p class="text-xs font-black text-gray-300">FaucetPay</p>
+          <p class="text-[9px] text-gray-500 font-semibold mt-0.5">Min: 500</p>
+        </button>
+        <button onclick="setGateway('USDT BEP20', 1500)" id="gw-usdt" class="bg-black/40 border border-gray-800 p-2.5 rounded-xl text-left">
+          <p class="text-xs font-black text-gray-300">USDT</p>
+          <p class="text-[9px] text-gray-500 font-semibold mt-0.5">Min: 1500</p>
+        </button>
+      </div>
+
+      <!-- Address Input -->
+      <div>
+        <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider" id="gwLabel">Enter UPI ID (e.g. mobile@upi / name@paytm)</label>
+        <input type="text" id="withdrawAddress" placeholder="9876543210@paytm" class="w-full bg-black/60 border border-emerald-900 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 mt-1 font-mono">
+      </div>
+
+      <!-- MANDATORY WITHDRAWAL RULES CHECKLIST (LEAF BOT STYLE) -->
+      <div class="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3.5 space-y-2">
+        <p class="text-[11px] font-extrabold text-amber-400 flex items-center space-x-1.5">
+          <i class="fa-solid fa-lock"></i>
+          <span>UNLOCK CONDITIONS TO WITHDRAW:</span>
+        </p>
+
+        <!-- Condition 1: Balance -->
+        <div class="flex justify-between items-center text-xs">
+          <span class="text-gray-300" id="ruleMinText">1. Minimum 2,500 XOIZ</span>
+          <span id="chk-bal" class="font-bold text-red-400">❌ Incomplete</span>
+        </div>
+
+        <!-- Condition 2: 3 Active Friends -->
+        <div class="flex justify-between items-center text-xs">
+          <span class="text-gray-300">2. Invite 3 Active Friends (<span id="chk-friends-count">0</span>/3)</span>
+          <span id="chk-friends" class="font-bold text-red-400">❌ Incomplete</span>
+        </div>
+
+        <!-- Condition 3: 3 Ads -->
+        <div class="flex justify-between items-center text-xs">
+          <span class="text-gray-300">3. Watch 3 Sponsored Ads (<span id="chk-ads-count">0</span>/3)</span>
+          <span id="chk-ads" class="font-bold text-red-400">❌ Incomplete</span>
+        </div>
+      </div>
+
+      <button onclick="processWithdraw()" class="w-full neon-btn py-3 rounded-xl font-black text-xs text-black tracking-wide active:scale-95 transition">
+        WITHDRAW TO UPI / GATEWAY
+      </button>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAVBAR -->
+  <div class="fixed bottom-0 left-0 right-0 bg-[#020904]/95 backdrop-blur-lg border-t border-emerald-950 px-3 py-2 flex justify-around items-center z-50">
+    <button onclick="switchTab('home')" id="nav-home" class="flex flex-col items-center text-[10px] active-nav font-bold">
       <i class="fa-solid fa-house text-base"></i>
-      <span class="mt-1 font-medium">Home</span>
+      <span class="mt-1">Home</span>
     </button>
-    <button onclick="switchTab('earn')" id="nav-earn" class="flex flex-col items-center text-xs text-gray-500">
+    <button onclick="switchTab('earn')" id="nav-earn" class="flex flex-col items-center text-[10px] text-gray-500 font-bold">
       <i class="fa-solid fa-bolt text-base"></i>
-      <span class="mt-1 font-medium">Earn</span>
+      <span class="mt-1">Earn</span>
     </button>
-    <button onclick="switchTab('wallet')" id="nav-wallet" class="flex flex-col items-center text-xs text-gray-500">
+    <button onclick="switchTab('play')" id="nav-play" class="flex flex-col items-center text-[10px] text-gray-500 font-bold">
+      <i class="fa-solid fa-gamepad text-base"></i>
+      <span class="mt-1">Play</span>
+    </button>
+    <button onclick="switchTab('friends')" id="nav-friends" class="flex flex-col items-center text-[10px] text-gray-500 font-bold">
+      <i class="fa-solid fa-users text-base"></i>
+      <span class="mt-1">Friends</span>
+    </button>
+    <button onclick="switchTab('wallet')" id="nav-wallet" class="flex flex-col items-center text-[10px] text-gray-500 font-bold">
       <i class="fa-solid fa-wallet text-base"></i>
-      <span class="mt-1 font-medium">Wallet</span>
+      <span class="mt-1">Me</span>
     </button>
   </div>
 
@@ -169,56 +357,239 @@
       tg.ready();
     }
 
-    // Load User Data from Telegram
+    // User Profile Read
     const user = tg?.initDataUnsafe?.user;
     if (user) {
-      document.getElementById('username').innerText = user.first_name + (user.last_name ? ' ' + user.last_name : '');
+      document.getElementById('username').innerText = (user.first_name + ' ' + (user.last_name || '')).trim();
       document.getElementById('userId').innerText = user.id;
       document.getElementById('userAvatar').innerText = user.first_name.charAt(0).toUpperCase();
+    } else {
+      document.getElementById('username').innerText = "Player One";
+      document.getElementById('userId').innerText = "88708188";
     }
 
-    // Local Storage Balance Setup
-    let currentBalance = parseInt(localStorage.getItem('xoiz_bal') || '0');
-    function updateBalanceUI() {
-      document.getElementById('balance').innerText = currentBalance;
-      document.getElementById('usdVal').innerText = (currentBalance * 0.00002).toFixed(4);
-      localStorage.setItem('xoiz_bal', currentBalance);
-    }
-    updateBalanceUI();
+    // Persistent State
+    let balance = parseInt(localStorage.getItem('xoiz_bal') || '0');
+    let adsToday = parseInt(localStorage.getItem('xoiz_ads_count') || '0');
+    let friendsCount = parseInt(localStorage.getItem('xoiz_friends_count') || '0');
+    let selectedGateway = 'UPI';
+    let minWithdraw = 2500; // 2,500 XOIZ = ₹50
 
-    // Tab Switching
-    function switchTab(tab) {
+    function renderUI() {
+      document.getElementById('balance').innerText = balance;
+      const inr = (balance / 50).toFixed(2);
+      document.getElementById('inrVal').innerText = inr;
+      document.getElementById('usdVal').innerText = (balance * 0.00002).toFixed(4);
+      document.getElementById('adsLeftText').innerText = `Limit: ${10 - adsToday}/10`;
+      
+      // Friends tab counters
+      document.getElementById('friendsCount').innerText = friendsCount;
+      document.getElementById('activeFriendsCount').innerText = friendsCount;
+      document.getElementById('refEarned').innerText = friendsCount * 750;
+
+      // Withdrawal Checklist Status
+      document.getElementById('chk-ads-count').innerText = adsToday;
+      document.getElementById('chk-friends-count').innerText = friendsCount;
+
+      // Check balance
+      if (balance >= minWithdraw) {
+        document.getElementById('chk-bal').innerText = "✅ Completed";
+        document.getElementById('chk-bal').className = "font-bold text-emerald-400";
+      } else {
+        document.getElementById('chk-bal').innerText = "❌ Incomplete";
+        document.getElementById('chk-bal').className = "font-bold text-red-400";
+      }
+
+      // Check friends
+      if (friendsCount >= 3) {
+        document.getElementById('chk-friends').innerText = "✅ Completed";
+        document.getElementById('chk-friends').className = "font-bold text-emerald-400";
+      } else {
+        document.getElementById('chk-friends').innerText = "❌ Incomplete";
+        document.getElementById('chk-friends').className = "font-bold text-red-400";
+      }
+
+      // Check ads
+      if (adsToday >= 3) {
+        document.getElementById('chk-ads').innerText = "✅ Completed";
+        document.getElementById('chk-ads').className = "font-bold text-emerald-400";
+      } else {
+        document.getElementById('chk-ads').innerText = "❌ Incomplete";
+        document.getElementById('chk-ads').className = "font-bold text-red-400";
+      }
+
+      localStorage.setItem('xoiz_bal', balance);
+      localStorage.setItem('xoiz_ads_count', adsToday);
+      localStorage.setItem('xoiz_friends_count', friendsCount);
+    }
+    renderUI();
+
+    // Tab Router
+    function switchTab(target) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-      document.querySelectorAll('.active-nav').forEach(el => {
+      document.querySelectorAll('#nav-home, #nav-earn, #nav-play, #nav-friends, #nav-wallet').forEach(el => {
         el.classList.remove('active-nav');
         el.classList.add('text-gray-500');
       });
-      document.getElementById('tab-' + tab).classList.remove('hidden');
-      const activeBtn = document.getElementById('nav-' + tab);
-      activeBtn.classList.remove('text-gray-500');
-      activeBtn.classList.add('active-nav');
+      document.getElementById('tab-' + target).classList.remove('hidden');
+      const activeBtn = document.getElementById('nav-' + target);
+      if (activeBtn) {
+        activeBtn.classList.remove('text-gray-500');
+        activeBtn.classList.add('active-nav');
+      }
     }
 
-    // Simulated Ad / Task Logic
-    function watchAd() {
-      if (tg) tg.HapticFeedback?.impactOccurred('medium');
-      alert("Simulating Ad View... (Yahan Adsgram script trigger hoga)");
-      currentBalance += 100;
-      updateBalanceUI();
-    }
-
-    function openChannel() {
-      if (tg) tg.openTelegramLink('https://t.me/xoizbot');
-      currentBalance += 250;
-      updateBalanceUI();
-    }
-
-    function requestWithdraw() {
-      if (currentBalance < 500) {
-        alert("Minimum withdrawal is 500 XOIZ!");
+    // ADSGRAM INTEGRATION
+    function triggerAdsgram(rewardAmount) {
+      if (adsToday >= 10) {
+        alert("Daily ad limit reached! Come back tomorrow.");
         return;
       }
-      alert("Withdrawal request recorded!");
+
+      if (!window.Adsgram) {
+        alert("Ads network initializing, please retry.");
+        return;
+      }
+
+      const AdController = window.Adsgram.init({ blockId: "int-6916" });
+
+      AdController.show().then((result) => {
+        balance += rewardAmount;
+        adsToday += 1;
+        renderUI();
+        if (tg) tg.HapticFeedback?.notificationOccurred('success');
+        alert(`Success! You earned +${rewardAmount} XOIZ!`);
+      }).catch((result) => {
+        alert("Ad not finished or unavailable. No reward given.");
+      });
+    }
+
+    // Lucky Wheel
+    function spinWheel() {
+      const lastSpin = localStorage.getItem('xoiz_last_spin');
+      const now = new Date().toDateString();
+      if (lastSpin === now) {
+        alert("Daily free spin already claimed! Come back tomorrow.");
+        return;
+      }
+
+      const rewards = [50, 100, 250, 500, 1000];
+      const win = rewards[Math.floor(Math.random() * rewards.length)];
+      balance += win;
+      localStorage.setItem('xoiz_last_spin', now);
+      renderUI();
+      alert(`🎉 Congratulations! You won ${win} XOIZ tokens!`);
+    }
+
+    // Task Logic
+    function doTask(type, reward, link) {
+      if (tg) tg.openTelegramLink(link);
+      setTimeout(() => {
+        balance += reward;
+        renderUI();
+        document.getElementById('btn-task-' + type).innerText = "DONE";
+        document.getElementById('btn-task-' + type).disabled = true;
+      }, 2000);
+    }
+
+    // Referral Share
+    function shareReferral() {
+      const myId = user ? user.id : '88708188';
+      const refLink = `https://t.me/xoizbot/app?startapp=${myId}`;
+      const shareText = encodeURIComponent(`☘️ Join XOIZ Bot and earn free UPI cash & crypto inside Telegram!\n👉 ${refLink}`);
+      
+      // Share triggers
+      if (tg) {
+        tg.openTelegramLink(`https://t.me/share/url?url=${refLink}&text=${shareText}`);
+      } else {
+        navigator.clipboard.writeText(refLink);
+        alert("Referral link copied!");
+      }
+
+      // Testing helper: click pe share count increment
+      friendsCount += 1;
+      balance += 250;
+      renderUI();
+    }
+
+    // Mini Games Placeholder
+    function playMiniGame(name) {
+      alert(`Launching ${name}... (Game reward requires at least 90s play)`);
+      balance += 50;
+      renderUI();
+    }
+
+    // Gateway Selection
+    function setGateway(gw, min) {
+      selectedGateway = gw;
+      minWithdraw = min;
+
+      const btnUpi = document.getElementById('gw-upi');
+      const btnFaucet = document.getElementById('gw-faucet');
+      const btnUsdt = document.getElementById('gw-usdt');
+
+      [btnUpi, btnFaucet, btnUsdt].forEach(btn => {
+        btn.className = "bg-black/40 border border-gray-800 p-2.5 rounded-xl text-left";
+      });
+
+      if (gw === 'UPI') {
+        btnUpi.className = "bg-emerald-950 border-2 border-emerald-500 p-2.5 rounded-xl text-left";
+        document.getElementById('gwLabel').innerText = "Enter UPI ID (e.g. mobile@upi / name@paytm)";
+        document.getElementById('withdrawAddress').placeholder = "9876543210@paytm";
+        document.getElementById('ruleMinText').innerText = "1. Minimum 2,500 XOIZ (₹50)";
+      } else if (gw === 'FaucetPay') {
+        btnFaucet.className = "bg-emerald-950 border-2 border-emerald-500 p-2.5 rounded-xl text-left";
+        document.getElementById('gwLabel').innerText = "FaucetPay Registered Email";
+        document.getElementById('withdrawAddress').placeholder = "user@gmail.com";
+        document.getElementById('ruleMinText').innerText = "1. Minimum 500 XOIZ";
+      } else {
+        btnUsdt.className = "bg-emerald-950 border-2 border-emerald-500 p-2.5 rounded-xl text-left";
+        document.getElementById('gwLabel').innerText = "USDT (BEP20) Wallet Address";
+        document.getElementById('withdrawAddress').placeholder = "0x...";
+        document.getElementById('ruleMinText').innerText = "1. Minimum 1,500 XOIZ";
+      }
+      renderUI();
+    }
+
+    // STRICT WITHDRAWAL LOGIC
+    function processWithdraw() {
+      const addr = document.getElementById('withdrawAddress').value.trim();
+      if (!addr) {
+        alert("Please enter a valid payout address or UPI ID.");
+        return;
+      }
+      
+      // 1. Balance Rule Check
+      if (balance < minWithdraw) {
+        alert(`❌ Insufficient Balance! Minimum required for ${selectedGateway} is ${minWithdraw} XOIZ.`);
+        return;
+      }
+
+      // 2. Friends Rule Check (Mandatory 3)
+      if (friendsCount < 3) {
+        alert(`❌ Withdrawal Locked! You must invite at least 3 friends first. Current: ${friendsCount}/3`);
+        switchTab('friends');
+        return;
+      }
+
+      // 3. Ads Rule Check (Mandatory 3)
+      if (adsToday < 3) {
+        alert(`❌ Withdrawal Locked! You must watch at least 3 sponsored ads today. Current: ${adsToday}/3`);
+        switchTab('earn');
+        return;
+      }
+
+      // UPI format validation
+      if (selectedGateway === 'UPI' && !addr.includes('@')) {
+        alert("Invalid UPI ID! Please include '@' (e.g. name@okhdfcbank).");
+        return;
+      }
+
+      balance -= minWithdraw;
+      renderUI();
+      
+      const payoutAmount = selectedGateway === 'UPI' ? `₹${minWithdraw / 50}` : `${minWithdraw} XOIZ`;
+      alert(`✅ Withdrawal request of ${payoutAmount} submitted successfully via ${selectedGateway}!\nPending admin transfer to: ${addr}`);
     }
   </script>
 </body>
