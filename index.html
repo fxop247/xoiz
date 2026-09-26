@@ -7,7 +7,7 @@
   
   <!-- Telegram WebApp SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <!-- Adsgram SDK -->
+  <!-- Adsgram Real SDK -->
   <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
   <!-- Tailwind CSS & Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -143,57 +143,60 @@
     </div>
   </div>
 
-  <!-- ================= TAB 2: EARN (3 ADS BUTTONS) ================= -->
+  <!-- ================= TAB 2: EARN (REAL ADSGRAM BUTTONS) ================= -->
   <div id="tab-earn" class="tab-content hidden px-5 space-y-4">
     <div class="flex justify-between items-center">
       <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Watch & Earn Video Ads</p>
       <span class="text-xs font-bold text-emerald-400" id="adsLeftText">Watched: 0/3</span>
     </div>
 
+    <!-- Ad Block 1: 49986 -->
     <div class="neon-card p-4 rounded-xl flex items-center justify-between">
       <div class="flex items-center space-x-3">
         <div class="w-12 h-12 rounded-xl bg-emerald-950 flex items-center justify-center text-xl text-emerald-400 border border-emerald-800">
           👀
         </div>
         <div>
-          <span class="text-[10px] bg-emerald-900/60 text-emerald-300 font-bold px-2 py-0.5 rounded">AD #1</span>
+          <span class="text-[10px] bg-emerald-900/60 text-emerald-300 font-bold px-2 py-0.5 rounded">UNIT #49986</span>
           <h4 class="font-bold text-sm text-white mt-1">High-CPM Video</h4>
           <p class="text-xs text-emerald-400 font-black">+50 XOIZ</p>
         </div>
       </div>
-      <button onclick="triggerAdsgram(50)" class="neon-btn text-black text-xs font-black px-4 py-2 rounded-xl active:scale-95 transition">
+      <button onclick="playAdsgramUnit('49986', 50)" class="neon-btn text-black text-xs font-black px-4 py-2 rounded-xl active:scale-95 transition">
         WATCH
       </button>
     </div>
 
+    <!-- Ad Block 2: 49987 -->
     <div class="neon-card p-4 rounded-xl flex items-center justify-between">
       <div class="flex items-center space-x-3">
         <div class="w-12 h-12 rounded-xl bg-emerald-950 flex items-center justify-center text-xl text-emerald-400 border border-emerald-800">
           🎬
         </div>
         <div>
-          <span class="text-[10px] bg-emerald-900/60 text-emerald-300 font-bold px-2 py-0.5 rounded">AD #2</span>
+          <span class="text-[10px] bg-emerald-900/60 text-emerald-300 font-bold px-2 py-0.5 rounded">UNIT #49987</span>
           <h4 class="font-bold text-sm text-white mt-1">Sponsor Clip</h4>
           <p class="text-xs text-emerald-400 font-black">+40 XOIZ</p>
         </div>
       </div>
-      <button onclick="triggerAdsgram(40)" class="neon-btn text-black text-xs font-black px-4 py-2 rounded-xl active:scale-95 transition">
+      <button onclick="playAdsgramUnit('49987', 40)" class="neon-btn text-black text-xs font-black px-4 py-2 rounded-xl active:scale-95 transition">
         WATCH
       </button>
     </div>
 
+    <!-- Ad Block 3: 49985 -->
     <div class="neon-card p-4 rounded-xl flex items-center justify-between">
       <div class="flex items-center space-x-3">
         <div class="w-12 h-12 rounded-xl bg-emerald-950 flex items-center justify-center text-xl text-emerald-400 border border-emerald-800">
           ⚡
         </div>
         <div>
-          <span class="text-[10px] bg-emerald-900/60 text-emerald-300 font-bold px-2 py-0.5 rounded">AD #3</span>
+          <span class="text-[10px] bg-emerald-900/60 text-emerald-300 font-bold px-2 py-0.5 rounded">UNIT #49985</span>
           <h4 class="font-bold text-sm text-white mt-1">Instant Ad</h4>
           <p class="text-xs text-emerald-400 font-black">+30 XOIZ</p>
         </div>
       </div>
-      <button onclick="triggerAdsgram(30)" class="neon-btn text-black text-xs font-black px-4 py-2 rounded-xl active:scale-95 transition">
+      <button onclick="playAdsgramUnit('49985', 30)" class="neon-btn text-black text-xs font-black px-4 py-2 rounded-xl active:scale-95 transition">
         WATCH
       </button>
     </div>
@@ -269,7 +272,7 @@
     </div>
   </div>
 
-  <!-- ================= TAB 4: FRIENDS (MAX 270 PER INVITE) ================= -->
+  <!-- ================= TAB 4: FRIENDS ================= -->
   <div id="tab-friends" class="tab-content hidden px-5 space-y-4">
     <div class="neon-card rounded-2xl p-5 text-center">
       <p class="text-[11px] text-gray-400 font-bold uppercase tracking-wider">Per Friend You Invite</p>
@@ -475,22 +478,23 @@
       }
     }
 
-    function triggerAdsgram(rewardAmount) {
+    // REAL ADSGRAM INTEGRATION WITH YOUR 3 BLOCK IDs
+    function playAdsgramUnit(blockId, reward) {
       if (!window.Adsgram) {
-        alert("Ads network initializing, please retry.");
+        alert("Ads network initializing, please try again in a few seconds.");
         return;
       }
 
-      const AdController = window.Adsgram.init({ blockId: "int-6916" });
+      const AdController = window.Adsgram.init({ blockId: String(blockId) });
 
       AdController.show().then((result) => {
-        balance += rewardAmount;
+        balance += reward;
         adsToday += 1;
         renderUI();
         if (tg) tg.HapticFeedback?.notificationOccurred('success');
-        alert(`Success! You watched the ad and earned +${rewardAmount} XOIZ!`);
+        alert(`🎉 Ad Completed! You earned +${reward} XOIZ!`);
       }).catch((result) => {
-        alert("Ad was not completed or unavailable. Reward cancelled.");
+        alert("Ad was skipped or not available at the moment. Please try again.");
       });
     }
 
@@ -540,7 +544,6 @@
       }, 2000);
     }
 
-    // REAL SHARING LOGIC (NO FAKE BALANCE/COUNT ON CLICK)
     function shareReferral() {
       const myId = user ? user.id : '88708188';
       const refLink = `https://t.me/xoizbot/app?startapp=${myId}`;
@@ -552,7 +555,6 @@
         navigator.clipboard.writeText(refLink);
         alert("Your referral link has been copied to clipboard!");
       }
-      // Koi fake balance addition nahi hoga
     }
 
     function setQuickAmount(ratio) {
