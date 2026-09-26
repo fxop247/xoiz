@@ -7,9 +7,9 @@
   
   <!-- Telegram WebApp SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <!-- Adsgram Real SDK -->
+  <!-- Adsgram SDK -->
   <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
-  <!-- Tailwind CSS & Icons -->
+  <!-- Tailwind CSS & FontAwesome Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
@@ -150,14 +150,14 @@
       <span class="text-xs font-bold text-emerald-400" id="adsLeftText">Watched: 0/3</span>
     </div>
 
-    <!-- Ad Block 1: 49986 -->
+    <!-- Ad Unit 1: 49986 -->
     <div class="neon-card p-4 rounded-xl flex items-center justify-between">
       <div class="flex items-center space-x-3">
         <div class="w-12 h-12 rounded-xl bg-emerald-950 flex items-center justify-center text-xl text-emerald-400 border border-emerald-800">
           👀
         </div>
         <div>
-          <span class="text-[10px] bg-emerald-900/60 text-emerald-300 font-bold px-2 py-0.5 rounded">UNIT #49986</span>
+          <span class="text-[10px] bg-emerald-900/60 text-emerald-300 font-bold px-2 py-0.5 rounded">AD #1</span>
           <h4 class="font-bold text-sm text-white mt-1">High-CPM Video</h4>
           <p class="text-xs text-emerald-400 font-black">+50 XOIZ</p>
         </div>
@@ -167,14 +167,14 @@
       </button>
     </div>
 
-    <!-- Ad Block 2: 49987 -->
+    <!-- Ad Unit 2: 49987 -->
     <div class="neon-card p-4 rounded-xl flex items-center justify-between">
       <div class="flex items-center space-x-3">
         <div class="w-12 h-12 rounded-xl bg-emerald-950 flex items-center justify-center text-xl text-emerald-400 border border-emerald-800">
           🎬
         </div>
         <div>
-          <span class="text-[10px] bg-emerald-900/60 text-emerald-300 font-bold px-2 py-0.5 rounded">UNIT #49987</span>
+          <span class="text-[10px] bg-emerald-900/60 text-emerald-300 font-bold px-2 py-0.5 rounded">AD #2</span>
           <h4 class="font-bold text-sm text-white mt-1">Sponsor Clip</h4>
           <p class="text-xs text-emerald-400 font-black">+40 XOIZ</p>
         </div>
@@ -184,14 +184,14 @@
       </button>
     </div>
 
-    <!-- Ad Block 3: 49985 -->
+    <!-- Ad Unit 3: 49985 -->
     <div class="neon-card p-4 rounded-xl flex items-center justify-between">
       <div class="flex items-center space-x-3">
         <div class="w-12 h-12 rounded-xl bg-emerald-950 flex items-center justify-center text-xl text-emerald-400 border border-emerald-800">
           ⚡
         </div>
         <div>
-          <span class="text-[10px] bg-emerald-900/60 text-emerald-300 font-bold px-2 py-0.5 rounded">UNIT #49985</span>
+          <span class="text-[10px] bg-emerald-900/60 text-emerald-300 font-bold px-2 py-0.5 rounded">AD #3</span>
           <h4 class="font-bold text-sm text-white mt-1">Instant Ad</h4>
           <p class="text-xs text-emerald-400 font-black">+30 XOIZ</p>
         </div>
@@ -478,14 +478,18 @@
       }
     }
 
-    // REAL ADSGRAM INTEGRATION WITH YOUR 3 BLOCK IDs
+    // ADSGRAM REAL INTEGRATION (WITH DEBUG MODE ENABLED)
     function playAdsgramUnit(blockId, reward) {
       if (!window.Adsgram) {
-        alert("Ads network initializing, please try again in a few seconds.");
+        alert("Ads network initializing, please try again in a moment.");
         return;
       }
 
-      const AdController = window.Adsgram.init({ blockId: String(blockId) });
+      // debug: true handles test ads while moderation status is pending
+      const AdController = window.Adsgram.init({ 
+        blockId: String(blockId),
+        debug: true 
+      });
 
       AdController.show().then((result) => {
         balance += reward;
@@ -494,7 +498,7 @@
         if (tg) tg.HapticFeedback?.notificationOccurred('success');
         alert(`🎉 Ad Completed! You earned +${reward} XOIZ!`);
       }).catch((result) => {
-        alert("Ad was skipped or not available at the moment. Please try again.");
+        alert("Ad was skipped or not available right now. Please try again.");
       });
     }
 
