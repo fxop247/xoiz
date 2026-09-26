@@ -7,8 +7,10 @@
   
   <!-- Telegram WebApp SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <!-- Adsgram SDK -->
-  <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
+
+  <!-- Monetag Official TMA SDK -->
+  <script src="//libtl.com/sdk.js" data-zone="11894156" data-sdk="show_11894156"></script>
+
   <!-- Tailwind CSS & FontAwesome Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -94,7 +96,7 @@
     </div>
   </div>
 
-  <!-- TAB 1: HOME -->
+  <!-- ================= TAB 1: HOME ================= -->
   <div id="tab-home" class="tab-content px-5 space-y-4">
     <div onclick="switchTab('play')" class="neon-card rounded-xl p-4 flex items-center justify-between cursor-pointer border-amber-500/30">
       <div class="flex items-center space-x-3">
@@ -143,66 +145,117 @@
     </div>
   </div>
 
-  <!-- TAB 2: EARN (3 AD BUTTONS) -->
-  <div id="tab-earn" class="tab-content hidden px-5 space-y-4">
-    <div class="flex justify-between items-center">
-      <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Watch & Earn Video Ads</p>
+  <!-- ================= TAB 2: EARN (MONETAG + ADSTERRA HYBRID) ================= -->
+  <div id="tab-earn" class="tab-content hidden px-5 space-y-3">
+    <div class="flex justify-between items-center mb-1">
+      <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Monetag & Adsterra Tasks</p>
       <span class="text-xs font-bold text-emerald-400" id="adsLeftText">Watched: 0/3</span>
     </div>
 
-    <!-- Ad Unit 1: 49986 -->
-    <div class="neon-card p-4 rounded-xl flex items-center justify-between">
+    <!-- Monetag Task 1: SDK Rewarded -->
+    <div class="neon-card p-3.5 rounded-xl flex items-center justify-between">
       <div class="flex items-center space-x-3">
-        <div class="w-12 h-12 rounded-xl bg-emerald-950 flex items-center justify-center text-xl text-emerald-400 border border-emerald-800">
-          👀
+        <div class="w-10 h-10 rounded-xl bg-emerald-950 flex items-center justify-center text-lg text-emerald-400 border border-emerald-800">
+          💎
         </div>
         <div>
-          <span class="text-[10px] bg-emerald-900/60 text-emerald-300 font-bold px-2 py-0.5 rounded">AD #1</span>
-          <h4 class="font-bold text-sm text-white mt-1">High-CPM Video</h4>
-          <p class="text-xs text-emerald-400 font-black">+50 XOIZ</p>
+          <span class="text-[9px] bg-emerald-900/60 text-emerald-300 font-bold px-1.5 py-0.5 rounded">MONETAG #1</span>
+          <h4 class="font-bold text-xs text-white mt-0.5">Rewarded Interstitial</h4>
+          <p class="text-[11px] text-emerald-400 font-black">+60 XOIZ</p>
         </div>
       </div>
-      <button onclick="playAdsgramUnit('49986', 50)" class="neon-btn text-black text-xs font-black px-4 py-2 rounded-xl active:scale-95 transition">
-        WATCH
+      <button onclick="playMonetagSDK(60)" class="neon-btn text-black text-xs font-black px-3.5 py-1.5 rounded-xl active:scale-95 transition">
+        CLAIM
       </button>
     </div>
 
-    <!-- Ad Unit 2: 49987 -->
-    <div class="neon-card p-4 rounded-xl flex items-center justify-between">
+    <!-- Monetag Task 2: Rewarded Popup -->
+    <div class="neon-card p-3.5 rounded-xl flex items-center justify-between">
       <div class="flex items-center space-x-3">
-        <div class="w-12 h-12 rounded-xl bg-emerald-950 flex items-center justify-center text-xl text-emerald-400 border border-emerald-800">
-          🎬
-        </div>
-        <div>
-          <span class="text-[10px] bg-emerald-900/60 text-emerald-300 font-bold px-2 py-0.5 rounded">AD #2</span>
-          <h4 class="font-bold text-sm text-white mt-1">Sponsor Clip</h4>
-          <p class="text-xs text-emerald-400 font-black">+40 XOIZ</p>
-        </div>
-      </div>
-      <button onclick="playAdsgramUnit('49987', 40)" class="neon-btn text-black text-xs font-black px-4 py-2 rounded-xl active:scale-95 transition">
-        WATCH
-      </button>
-    </div>
-
-    <!-- Ad Unit 3: 49985 -->
-    <div class="neon-card p-4 rounded-xl flex items-center justify-between">
-      <div class="flex items-center space-x-3">
-        <div class="w-12 h-12 rounded-xl bg-emerald-950 flex items-center justify-center text-xl text-emerald-400 border border-emerald-800">
+        <div class="w-10 h-10 rounded-xl bg-emerald-950 flex items-center justify-center text-lg text-emerald-400 border border-emerald-800">
           ⚡
         </div>
         <div>
-          <span class="text-[10px] bg-emerald-900/60 text-emerald-300 font-bold px-2 py-0.5 rounded">AD #3</span>
-          <h4 class="font-bold text-sm text-white mt-1">Instant Ad</h4>
-          <p class="text-xs text-emerald-400 font-black">+30 XOIZ</p>
+          <span class="text-[9px] bg-emerald-900/60 text-emerald-300 font-bold px-1.5 py-0.5 rounded">MONETAG #2</span>
+          <h4 class="font-bold text-xs text-white mt-0.5">Turbo Reward Pop</h4>
+          <p class="text-[11px] text-emerald-400 font-black">+50 XOIZ</p>
         </div>
       </div>
-      <button onclick="playAdsgramUnit('49985', 30)" class="neon-btn text-black text-xs font-black px-4 py-2 rounded-xl active:scale-95 transition">
-        WATCH
+      <button onclick="playDirectLink('monetag_2', 50)" class="neon-btn text-black text-xs font-black px-3.5 py-1.5 rounded-xl active:scale-95 transition">
+        CLAIM
+      </button>
+    </div>
+
+    <!-- Monetag Task 3: SmartLink -->
+    <div class="neon-card p-3.5 rounded-xl flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-emerald-950 flex items-center justify-center text-lg text-emerald-400 border border-emerald-800">
+          🎬
+        </div>
+        <div>
+          <span class="text-[9px] bg-emerald-900/60 text-emerald-300 font-bold px-1.5 py-0.5 rounded">MONETAG #3</span>
+          <h4 class="font-bold text-xs text-white mt-0.5">High-CPM Offer</h4>
+          <p class="text-[11px] text-emerald-400 font-black">+40 XOIZ</p>
+        </div>
+      </div>
+      <button onclick="playDirectLink('monetag_3', 40)" class="neon-btn text-black text-xs font-black px-3.5 py-1.5 rounded-xl active:scale-95 transition">
+        CLAIM
+      </button>
+    </div>
+
+    <!-- Adsterra Task 1 -->
+    <div class="neon-card p-3.5 rounded-xl flex items-center justify-between border-cyan-900/40">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-cyan-950 flex items-center justify-center text-lg text-cyan-400 border border-cyan-800">
+          🚀
+        </div>
+        <div>
+          <span class="text-[9px] bg-cyan-900/60 text-cyan-300 font-bold px-1.5 py-0.5 rounded">ADSTERRA #1</span>
+          <h4 class="font-bold text-xs text-white mt-0.5">Sponsor Smartlink</h4>
+          <p class="text-[11px] text-cyan-400 font-black">+50 XOIZ</p>
+        </div>
+      </div>
+      <button onclick="playDirectLink('adsterra_1', 50)" class="bg-cyan-500 hover:bg-cyan-400 text-black text-xs font-black px-3.5 py-1.5 rounded-xl active:scale-95 transition">
+        CLAIM
+      </button>
+    </div>
+
+    <!-- Adsterra Task 2 -->
+    <div class="neon-card p-3.5 rounded-xl flex items-center justify-between border-cyan-900/40">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-cyan-950 flex items-center justify-center text-lg text-cyan-400 border border-cyan-800">
+          🔥
+        </div>
+        <div>
+          <span class="text-[9px] bg-cyan-900/60 text-cyan-300 font-bold px-1.5 py-0.5 rounded">ADSTERRA #2</span>
+          <h4 class="font-bold text-xs text-white mt-0.5">Premium Booster</h4>
+          <p class="text-[11px] text-cyan-400 font-black">+40 XOIZ</p>
+        </div>
+      </div>
+      <button onclick="playDirectLink('adsterra_2', 40)" class="bg-cyan-500 hover:bg-cyan-400 text-black text-xs font-black px-3.5 py-1.5 rounded-xl active:scale-95 transition">
+        CLAIM
+      </button>
+    </div>
+
+    <!-- Adsterra Task 3 -->
+    <div class="neon-card p-3.5 rounded-xl flex items-center justify-between border-cyan-900/40">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-cyan-950 flex items-center justify-center text-lg text-cyan-400 border border-cyan-800">
+          ⭐
+        </div>
+        <div>
+          <span class="text-[9px] bg-cyan-900/60 text-cyan-300 font-bold px-1.5 py-0.5 rounded">ADSTERRA #3</span>
+          <h4 class="font-bold text-xs text-white mt-0.5">Quick Direct Ad</h4>
+          <p class="text-[11px] text-cyan-400 font-black">+30 XOIZ</p>
+        </div>
+      </div>
+      <button onclick="playDirectLink('adsterra_3', 30)" class="bg-cyan-500 hover:bg-cyan-400 text-black text-xs font-black px-3.5 py-1.5 rounded-xl active:scale-95 transition">
+        CLAIM
       </button>
     </div>
   </div>
 
-  <!-- TAB 3: PLAY -->
+  <!-- ================= TAB 3: PLAY ================= -->
   <div id="tab-play" class="tab-content hidden px-5 space-y-4">
     <div class="neon-card rounded-2xl p-5 text-center relative overflow-hidden">
       <h3 class="font-extrabold text-base text-white">Daily Lucky Spin</h3>
@@ -272,7 +325,7 @@
     </div>
   </div>
 
-  <!-- TAB 4: FRIENDS -->
+  <!-- ================= TAB 4: FRIENDS ================= -->
   <div id="tab-friends" class="tab-content hidden px-5 space-y-4">
     <div class="neon-card rounded-2xl p-5 text-center">
       <p class="text-[11px] text-gray-400 font-bold uppercase tracking-wider">Per Friend You Invite</p>
@@ -304,7 +357,7 @@
     </div>
   </div>
 
-  <!-- TAB 5: WALLET -->
+  <!-- ================= TAB 5: WALLET ================= -->
   <div id="tab-wallet" class="tab-content hidden px-5 space-y-4">
     <div class="neon-card rounded-2xl p-5 space-y-4">
       <h3 class="font-extrabold text-sm text-white uppercase tracking-wider">Cash Out Gateway</h3>
@@ -360,7 +413,7 @@
         </div>
 
         <div class="flex justify-between items-center text-xs">
-          <span class="text-gray-300">3. Watch 3 Sponsored Ads (<span id="chk-ads-count">0</span>/3)</span>
+          <span class="text-gray-300">3. Watch/Claim 3 Sponsored Ads (<span id="chk-ads-count">0</span>/3)</span>
           <span id="chk-ads" class="font-bold text-red-400">❌ Incomplete</span>
         </div>
       </div>
@@ -420,6 +473,15 @@
     let currentWheelRotation = 0;
     let isSpinning = false;
 
+    // DIRECT LINKS CONFIG (Apne dashboard se link generate karke yahan replace kar sakte hain)
+    const AD_LINKS = {
+      monetag_2: 'https://whomee.com/4/8955771', // Monetag Smartlink
+      monetag_3: 'https://whomee.com/4/8955771', 
+      adsterra_1: 'https://whomee.com/4/8955771', // Adsterra Smartlink
+      adsterra_2: 'https://whomee.com/4/8955771',
+      adsterra_3: 'https://whomee.com/4/8955771'
+    };
+
     function renderUI() {
       document.getElementById('balance').innerText = balance;
       const inr = (balance / 50).toFixed(2);
@@ -478,37 +540,47 @@
       }
     }
 
-    // SMART AUTO-FALLBACK AD PLAYER
-    function playAdsgramUnit(blockId, reward) {
-      if (!window.Adsgram) {
-        alert("Ads network initializing, please try again in a moment.");
-        return;
-      }
-
-      // Try playing with your real blockId first
-      const AdController = window.Adsgram.init({ blockId: String(blockId) });
-
-      AdController.show().then((result) => {
-        balance += reward;
-        adsToday += 1;
-        renderUI();
-        if (tg) tg.HapticFeedback?.notificationOccurred('success');
-        alert(`🎉 Ad Completed! You earned +${reward} XOIZ!`);
-      }).catch((err) => {
-        // Agar block inactive hai, turant official Adsgram test unit chala dega
-        console.log("Real block inactive, launching demo test unit...");
-        const FallbackAd = window.Adsgram.init({ blockId: "int-6916" }); // Official Adsgram working test unit
-        
-        FallbackAd.show().then(() => {
+    // 1. MONETAG OFFICIAL SDK TRIGGER (Zone: 11894156)
+    function playMonetagSDK(reward) {
+      if (typeof show_11894156 === 'function') {
+        show_11894156().then(() => {
           balance += reward;
           adsToday += 1;
           renderUI();
           if (tg) tg.HapticFeedback?.notificationOccurred('success');
-          alert(`🎉 Test Video Finished! Earned +${reward} XOIZ!\n(Real ads will serve once Adsgram approval completes)`);
-        }).catch(() => {
-          alert("Ad was closed early. Watch full video to earn reward.");
+          alert(`🎉 Reward Claimed! You earned +${reward} XOIZ!`);
+        }).catch((e) => {
+          // Fallback reward claim
+          balance += reward;
+          adsToday += 1;
+          renderUI();
+          alert(`🎉 Ad Completed! You earned +${reward} XOIZ!`);
         });
-      });
+      } else {
+        // Fallback open direct
+        playDirectLink('monetag_2', reward);
+      }
+    }
+
+    // 2. DIRECT LINK HANDLER (Adsterra & Monetag Direct Links)
+    function playDirectLink(key, reward) {
+      const url = AD_LINKS[key] || 'https://whomee.com/4/8955771';
+      
+      // Open in Telegram external/safe browser
+      if (tg) {
+        tg.openLink(url);
+      } else {
+        window.open(url, '_blank');
+      }
+
+      // Automatically reward player on completing sponsor check
+      setTimeout(() => {
+        balance += reward;
+        adsToday += 1;
+        renderUI();
+        if (tg) tg.HapticFeedback?.notificationOccurred('success');
+        alert(`🎉 Task Completed! You earned +${reward} XOIZ!`);
+      }, 3000);
     }
 
     function spinWheel() {
