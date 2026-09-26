@@ -94,7 +94,7 @@
     </div>
   </div>
 
-  <!-- ================= TAB 1: HOME ================= -->
+  <!-- TAB 1: HOME -->
   <div id="tab-home" class="tab-content px-5 space-y-4">
     <div onclick="switchTab('play')" class="neon-card rounded-xl p-4 flex items-center justify-between cursor-pointer border-amber-500/30">
       <div class="flex items-center space-x-3">
@@ -143,7 +143,7 @@
     </div>
   </div>
 
-  <!-- ================= TAB 2: EARN (REAL ADSGRAM BUTTONS) ================= -->
+  <!-- TAB 2: EARN (3 AD BUTTONS) -->
   <div id="tab-earn" class="tab-content hidden px-5 space-y-4">
     <div class="flex justify-between items-center">
       <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Watch & Earn Video Ads</p>
@@ -202,7 +202,7 @@
     </div>
   </div>
 
-  <!-- ================= TAB 3: PLAY ================= -->
+  <!-- TAB 3: PLAY -->
   <div id="tab-play" class="tab-content hidden px-5 space-y-4">
     <div class="neon-card rounded-2xl p-5 text-center relative overflow-hidden">
       <h3 class="font-extrabold text-base text-white">Daily Lucky Spin</h3>
@@ -272,7 +272,7 @@
     </div>
   </div>
 
-  <!-- ================= TAB 4: FRIENDS ================= -->
+  <!-- TAB 4: FRIENDS -->
   <div id="tab-friends" class="tab-content hidden px-5 space-y-4">
     <div class="neon-card rounded-2xl p-5 text-center">
       <p class="text-[11px] text-gray-400 font-bold uppercase tracking-wider">Per Friend You Invite</p>
@@ -304,7 +304,7 @@
     </div>
   </div>
 
-  <!-- ================= TAB 5: WALLET ================= -->
+  <!-- TAB 5: WALLET -->
   <div id="tab-wallet" class="tab-content hidden px-5 space-y-4">
     <div class="neon-card rounded-2xl p-5 space-y-4">
       <h3 class="font-extrabold text-sm text-white uppercase tracking-wider">Cash Out Gateway</h3>
@@ -478,18 +478,15 @@
       }
     }
 
-    // ADSGRAM REAL INTEGRATION (WITH DEBUG MODE ENABLED)
+    // SMART AUTO-FALLBACK AD PLAYER
     function playAdsgramUnit(blockId, reward) {
       if (!window.Adsgram) {
         alert("Ads network initializing, please try again in a moment.");
         return;
       }
 
-      // debug: true handles test ads while moderation status is pending
-      const AdController = window.Adsgram.init({ 
-        blockId: String(blockId),
-        debug: true 
-      });
+      // Try playing with your real blockId first
+      const AdController = window.Adsgram.init({ blockId: String(blockId) });
 
       AdController.show().then((result) => {
         balance += reward;
@@ -497,8 +494,20 @@
         renderUI();
         if (tg) tg.HapticFeedback?.notificationOccurred('success');
         alert(`🎉 Ad Completed! You earned +${reward} XOIZ!`);
-      }).catch((result) => {
-        alert("Ad was skipped or not available right now. Please try again.");
+      }).catch((err) => {
+        // Agar block inactive hai, turant official Adsgram test unit chala dega
+        console.log("Real block inactive, launching demo test unit...");
+        const FallbackAd = window.Adsgram.init({ blockId: "int-6916" }); // Official Adsgram working test unit
+        
+        FallbackAd.show().then(() => {
+          balance += reward;
+          adsToday += 1;
+          renderUI();
+          if (tg) tg.HapticFeedback?.notificationOccurred('success');
+          alert(`🎉 Test Video Finished! Earned +${reward} XOIZ!\n(Real ads will serve once Adsgram approval completes)`);
+        }).catch(() => {
+          alert("Ad was closed early. Watch full video to earn reward.");
+        });
       });
     }
 
