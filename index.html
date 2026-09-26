@@ -418,7 +418,7 @@
         </div>
       </div>
 
-      <button onclick="processWithdraw()" class="w-full neon-btn py-3 rounded-xl font-black text-xs text-black tracking-wide active:scale-95 transition">
+      <button onclick="processWithdraw()" id="btnSubmitWithdraw" class="w-full neon-btn py-3 rounded-xl font-black text-xs text-black tracking-wide active:scale-95 transition">
         CONFIRM WITHDRAWAL
       </button>
     </div>
@@ -449,6 +449,10 @@
   </div>
 
   <script>
+    // CONFIGURATION
+    const BOT_TOKEN = '8955771214:AAEmxx1neQuHiI5_f8D9Oeub0pBibRvkMCY';
+    const ADMIN_CHAT_ID = '8870818890';
+
     const tg = window.Telegram?.WebApp;
     if (tg) {
       tg.expand();
@@ -473,7 +477,7 @@
     let currentWheelRotation = 0;
     let isSpinning = false;
 
-    // DIRECT LINKS STORE (Live Real Links)
+    // DIRECT LINKS STORE
     const AD_LINKS = {
       monetag_smartlink: 'https://www.profitableratecpmnetwork.com/d04ajsbmp?key=95f52238f5b65363f9786e07b5d75073',
       adsterra_1: 'https://www.profitableratecpmnetwork.com/d04ajsbmp?key=95f52238f5b65363f9786e07b5d75073',
@@ -712,9 +716,10 @@
       renderUI();
     }
 
-    function processWithdraw() {
+    async function processWithdraw() {
       const reqAmount = parseInt(document.getElementById('withdrawAmountInput').value || '0');
       const addr = document.getElementById('withdrawAddress').value.trim();
+      const submitBtn = document.getElementById('btnSubmitWithdraw');
 
       if (!reqAmount || reqAmount <= 0) {
         alert("Please enter a valid amount to withdraw!");
@@ -753,13 +758,45 @@
         return;
       }
 
+      submitBtn.innerText = "SENDING REQUEST...";
+      submitBtn.disabled = true;
+
+      const currentUserName = user ? `${user.first_name} ${user.last_name || ''}`.trim() : 'Player One';
+      const currentUserId = user ? user.id : 'Unknown';
+      const currentUserHandle = user && user.username ? `@${user.username}` : 'No username';
+      const payoutEquivalent = selectedGateway === 'UPI' ? `₹${(reqAmount / 50).toFixed(2)}` : `${reqAmount} XOIZ`;
+
+      const notificationText = `🚨 *NEW WITHDRAWAL REQUEST!* 🚨\n\n` +
+        `👤 *User:* ${currentUserName} (${currentUserHandle})\n` +
+        `🆔 *User ID:* \`${currentUserId}\`\n` +
+        `💰 *Amount:* ${reqAmount} XOIZ (${payoutEquivalent})\n` +
+        `🏦 *Method:* ${selectedGateway}\n` +
+        `📍 *Payout Address / UPI:* \`${addr}\`\n\n` +
+        `🕒 *Time:* ${new Date().toLocaleString()}`;
+
+      try {
+        await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: ADMIN_CHAT_ID,
+            text: notificationText,
+            parse_mode: 'Markdown'
+          })
+        });
+      } catch (err) {
+        console.error("Failed to forward admin notification", err);
+      }
+
       balance -= reqAmount;
       renderUI();
       document.getElementById('withdrawAmountInput').value = '';
       calculateWithdrawEq();
 
-      const payoutDisplay = selectedGateway === 'UPI' ? `₹${(reqAmount / 50).toFixed(2)}` : `${reqAmount} XOIZ`;
-      alert(`✅ Withdrawal request of ${payoutDisplay} (${reqAmount} XOIZ) submitted successfully!\nDestination: ${addr}\nStatus: Pending verification.`);
+      submitBtn.innerText = "CONFIRM WITHDRAWAL";
+      submitBtn.disabled = false;
+
+      alert(`✅ Withdrawal request submitted successfully!\nDestination: ${addr}\nStatus: Sent to Admin for verification.`);
     }
   </script>
 </body>
