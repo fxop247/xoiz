@@ -145,14 +145,14 @@
     </div>
   </div>
 
-  <!-- ================= TAB 2: EARN (MONETAG + ADSTERRA HYBRID) ================= -->
+  <!-- ================= TAB 2: EARN ================= -->
   <div id="tab-earn" class="tab-content hidden px-5 space-y-3">
     <div class="flex justify-between items-center mb-1">
-      <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Monetag & Adsterra Tasks</p>
+      <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Official Sponsored Ads</p>
       <span class="text-xs font-bold text-emerald-400" id="adsLeftText">Watched: 0/3</span>
     </div>
 
-    <!-- Monetag Task 1: SDK Rewarded -->
+    <!-- Monetag Unit 1: Rewarded Interstitial -->
     <div class="neon-card p-3.5 rounded-xl flex items-center justify-between">
       <div class="flex items-center space-x-3">
         <div class="w-10 h-10 rounded-xl bg-emerald-950 flex items-center justify-center text-lg text-emerald-400 border border-emerald-800">
@@ -164,12 +164,12 @@
           <p class="text-[11px] text-emerald-400 font-black">+60 XOIZ</p>
         </div>
       </div>
-      <button onclick="playMonetagSDK(60)" class="neon-btn text-black text-xs font-black px-3.5 py-1.5 rounded-xl active:scale-95 transition">
+      <button onclick="playMonetagInterstitial(60)" class="neon-btn text-black text-xs font-black px-3.5 py-1.5 rounded-xl active:scale-95 transition">
         CLAIM
       </button>
     </div>
 
-    <!-- Monetag Task 2: Rewarded Popup -->
+    <!-- Monetag Unit 2: Rewarded Popup -->
     <div class="neon-card p-3.5 rounded-xl flex items-center justify-between">
       <div class="flex items-center space-x-3">
         <div class="w-10 h-10 rounded-xl bg-emerald-950 flex items-center justify-center text-lg text-emerald-400 border border-emerald-800">
@@ -177,16 +177,16 @@
         </div>
         <div>
           <span class="text-[9px] bg-emerald-900/60 text-emerald-300 font-bold px-1.5 py-0.5 rounded">MONETAG #2</span>
-          <h4 class="font-bold text-xs text-white mt-0.5">Turbo Reward Pop</h4>
+          <h4 class="font-bold text-xs text-white mt-0.5">Rewarded Popup Ad</h4>
           <p class="text-[11px] text-emerald-400 font-black">+50 XOIZ</p>
         </div>
       </div>
-      <button onclick="playDirectLink('monetag_2', 50)" class="neon-btn text-black text-xs font-black px-3.5 py-1.5 rounded-xl active:scale-95 transition">
+      <button onclick="playMonetagPopup(50)" class="neon-btn text-black text-xs font-black px-3.5 py-1.5 rounded-xl active:scale-95 transition">
         CLAIM
       </button>
     </div>
 
-    <!-- Monetag Task 3: SmartLink -->
+    <!-- Monetag Unit 3: SmartLink -->
     <div class="neon-card p-3.5 rounded-xl flex items-center justify-between">
       <div class="flex items-center space-x-3">
         <div class="w-10 h-10 rounded-xl bg-emerald-950 flex items-center justify-center text-lg text-emerald-400 border border-emerald-800">
@@ -194,16 +194,16 @@
         </div>
         <div>
           <span class="text-[9px] bg-emerald-900/60 text-emerald-300 font-bold px-1.5 py-0.5 rounded">MONETAG #3</span>
-          <h4 class="font-bold text-xs text-white mt-0.5">High-CPM Offer</h4>
+          <h4 class="font-bold text-xs text-white mt-0.5">Direct Bonus Offer</h4>
           <p class="text-[11px] text-emerald-400 font-black">+40 XOIZ</p>
         </div>
       </div>
-      <button onclick="playDirectLink('monetag_3', 40)" class="neon-btn text-black text-xs font-black px-3.5 py-1.5 rounded-xl active:scale-95 transition">
+      <button onclick="playDirectLink('monetag_smartlink', 40)" class="neon-btn text-black text-xs font-black px-3.5 py-1.5 rounded-xl active:scale-95 transition">
         CLAIM
       </button>
     </div>
 
-    <!-- Adsterra Task 1 -->
+    <!-- Adsterra Slot 1 -->
     <div class="neon-card p-3.5 rounded-xl flex items-center justify-between border-cyan-900/40">
       <div class="flex items-center space-x-3">
         <div class="w-10 h-10 rounded-xl bg-cyan-950 flex items-center justify-center text-lg text-cyan-400 border border-cyan-800">
@@ -220,7 +220,7 @@
       </button>
     </div>
 
-    <!-- Adsterra Task 2 -->
+    <!-- Adsterra Slot 2 -->
     <div class="neon-card p-3.5 rounded-xl flex items-center justify-between border-cyan-900/40">
       <div class="flex items-center space-x-3">
         <div class="w-10 h-10 rounded-xl bg-cyan-950 flex items-center justify-center text-lg text-cyan-400 border border-cyan-800">
@@ -237,7 +237,7 @@
       </button>
     </div>
 
-    <!-- Adsterra Task 3 -->
+    <!-- Adsterra Slot 3 -->
     <div class="neon-card p-3.5 rounded-xl flex items-center justify-between border-cyan-900/40">
       <div class="flex items-center space-x-3">
         <div class="w-10 h-10 rounded-xl bg-cyan-950 flex items-center justify-center text-lg text-cyan-400 border border-cyan-800">
@@ -473,14 +473,31 @@
     let currentWheelRotation = 0;
     let isSpinning = false;
 
-    // DIRECT LINKS CONFIG (Apne dashboard se link generate karke yahan replace kar sakte hain)
+    // DIRECT LINKS STORE (Live Real Links)
     const AD_LINKS = {
-      monetag_2: 'https://whomee.com/4/8955771', // Monetag Smartlink
-      monetag_3: 'https://whomee.com/4/8955771', 
-      adsterra_1: 'https://whomee.com/4/8955771', // Adsterra Smartlink
-      adsterra_2: 'https://whomee.com/4/8955771',
-      adsterra_3: 'https://whomee.com/4/8955771'
+      monetag_smartlink: 'https://www.profitableratecpmnetwork.com/d04ajsbmp?key=95f52238f5b65363f9786e07b5d75073',
+      adsterra_1: 'https://www.profitableratecpmnetwork.com/d04ajsbmp?key=95f52238f5b65363f9786e07b5d75073',
+      adsterra_2: 'https://www.profitableratecpmnetwork.com/crq06qs0x?key=1a6b9c34d574b22e1f30d36e457961e8',
+      adsterra_3: 'https://www.profitableratecpmnetwork.com/shaixcsy8?key=f5588ed35f2851efdf64489a05fa127e'
     };
+
+    // 1. AUTO BACKGROUND IN-APP INTERSTITIAL
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        if (typeof show_11894156 === 'function') {
+          show_11894156({
+            type: 'inApp',
+            inAppSettings: {
+              frequency: 2,
+              capping: 0.1,
+              interval: 30,
+              timeout: 5,
+              everyPage: false
+            }
+          });
+        }
+      }, 2000);
+    });
 
     function renderUI() {
       document.getElementById('balance').innerText = balance;
@@ -540,8 +557,8 @@
       }
     }
 
-    // 1. MONETAG OFFICIAL SDK TRIGGER (Zone: 11894156)
-    function playMonetagSDK(reward) {
+    // 2. MONETAG REWARDED INTERSTITIAL FUNCTION
+    function playMonetagInterstitial(reward) {
       if (typeof show_11894156 === 'function') {
         show_11894156().then(() => {
           balance += reward;
@@ -550,30 +567,40 @@
           if (tg) tg.HapticFeedback?.notificationOccurred('success');
           alert(`🎉 Reward Claimed! You earned +${reward} XOIZ!`);
         }).catch((e) => {
-          // Fallback reward claim
-          balance += reward;
-          adsToday += 1;
-          renderUI();
-          alert(`🎉 Ad Completed! You earned +${reward} XOIZ!`);
+          playDirectLink('adsterra_1', reward);
         });
       } else {
-        // Fallback open direct
-        playDirectLink('monetag_2', reward);
+        playDirectLink('adsterra_1', reward);
       }
     }
 
-    // 2. DIRECT LINK HANDLER (Adsterra & Monetag Direct Links)
+    // 3. MONETAG REWARDED POPUP FUNCTION
+    function playMonetagPopup(reward) {
+      if (typeof show_11894156 === 'function') {
+        show_11894156('pop').then(() => {
+          balance += reward;
+          adsToday += 1;
+          renderUI();
+          if (tg) tg.HapticFeedback?.notificationOccurred('success');
+          alert(`🎉 Reward Claimed! You earned +${reward} XOIZ!`);
+        }).catch((e) => {
+          playDirectLink('adsterra_2', reward);
+        });
+      } else {
+        playDirectLink('adsterra_2', reward);
+      }
+    }
+
+    // 4. SMARTLINK / DIRECT LINK HANDLER
     function playDirectLink(key, reward) {
-      const url = AD_LINKS[key] || 'https://whomee.com/4/8955771';
+      const url = AD_LINKS[key] || AD_LINKS.adsterra_1;
       
-      // Open in Telegram external/safe browser
       if (tg) {
         tg.openLink(url);
       } else {
         window.open(url, '_blank');
       }
 
-      // Automatically reward player on completing sponsor check
       setTimeout(() => {
         balance += reward;
         adsToday += 1;
